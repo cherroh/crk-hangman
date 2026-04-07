@@ -43,7 +43,7 @@ function App() {
 
   return (
     <div style={{ textAlign: "center", padding: "2rem" }}>
-      <h1>CRK Hangman</h1>
+      <h1>CRK Hangman Test</h1>
 
       <h2>{maskedWord}</h2>
 
