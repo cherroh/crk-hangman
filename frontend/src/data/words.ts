@@ -6,4 +6,6 @@ export const WORDS = [
   "kingdom",
   "treasure",
   "battle",
+  "kingdomcrumbs",
+  "cherrow",
 ];
