@@ -9,5 +9,10 @@ export const WORDS = [
   "kingdomcrumbs",
   "cherrow",
   "brave",
-  "crk"
+  "crk",
+  "beast",
+  "yeast",
+  "thisisthelongestoneyouwontknowhowtosolvethisone",
+  "error: 404",
+  "e",
 ];
