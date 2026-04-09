@@ -13,6 +13,10 @@ export const WORDS = [
   "beast",
   "yeast",
   "thisisthelongestoneyouwontknowhowtosolvethisone",
-  "error: 404",
+  "1234567890",
   "e",
+  "wordle",
+  "imacoolcookie",
+  "dreakt",
+  "yummycookieeater,"
 ];
