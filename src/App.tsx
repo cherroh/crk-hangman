@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import icon from "./assets/crkicon.png";
 import "./App.css";
 import { WORDS } from "./data/words";
@@ -19,7 +19,20 @@ function App() {
 
   const maskedWord = getMaskedWord(word, guessedLetters);
   const maskedWordLength = maskedWord.length;
-  const wordFontSize = Math.max(16, Math.min(48, Math.floor(640 / Math.max(maskedWordLength, 10))));
+  const maskedLetters = maskedWord.split(" ");
+  const wordFontSize = Math.max(2, Math.min(48, Math.floor(720 / Math.max(maskedWordLength, 10))));
+
+  useEffect(() => {
+    if (gameStatus !== "correct" && gameStatus !== "wrong") {
+      return;
+    }
+
+    const timeout = window.setTimeout(() => {
+      setGameStatus("idle");
+    }, 5000);
+
+    return () => window.clearTimeout(timeout);
+  }, [gameStatus]);
 
   const handleGuess = () => {
     const normalized = input.toLowerCase().trim().replace(/[^a-z]/g, "");
@@ -107,7 +120,13 @@ function App() {
             aria-label="Masked word"
             style={{ fontSize: `${wordFontSize}px` }}
           >
-            {maskedWord}
+            <div className="word-display-inner">
+              {maskedLetters.map((letter, index) => (
+                <span key={`${letter}-${index}`} className="word-tile">
+                  {letter}
+                </span>
+              ))}
+            </div>
           </div>
         </section>
 
@@ -121,7 +140,7 @@ function App() {
                   value={input}
                   onChange={(e) => setInput(e.target.value.slice(0, 1))}
                   maxLength={1}
-                  placeholder="A"
+                  placeholder="a"
                   aria-label="Guess a letter"
                 />
               </label>
