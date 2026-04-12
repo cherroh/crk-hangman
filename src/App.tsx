@@ -1,4 +1,5 @@
 import { useState } from "react";
+import icon from "./assets/crkicon.png";
 import "./App.css";
 import { WORDS } from "./data/words";
 import { getMaskedWord, isWordGuessed } from "./utils/gameLogic";
@@ -14,18 +15,30 @@ function App() {
   const [guessedLetters, setGuessedLetters] = useState<string[]>([]);
   const [wrongGuesses, setWrongGuesses] = useState(0);
   const [input, setInput] = useState("");
+  const [gameStatus, setGameStatus] = useState<"idle" | "correct" | "wrong" | "won" | "lost">("idle");
 
   const maskedWord = getMaskedWord(word, guessedLetters);
+  const maskedWordLength = maskedWord.length;
+  const wordFontSize = Math.max(16, Math.min(48, Math.floor(640 / Math.max(maskedWordLength, 10))));
 
   const handleGuess = () => {
-    const letter = input.toLowerCase();
+    const normalized = input.toLowerCase().trim().replace(/[^a-z]/g, "");
 
-    if (!letter || guessedLetters.includes(letter)) return;
+    if (!normalized || guessedLetters.includes(normalized)) return;
 
-    setGuessedLetters((prev) => [...prev, letter]);
+    const nextGuessedLetters = [...guessedLetters, normalized];
+    setGuessedLetters(nextGuessedLetters);
 
-    if (!word.includes(letter)) {
-      setWrongGuesses((prev) => prev + 1);
+    if (word.includes(normalized)) {
+      if (isWordGuessed(word, nextGuessedLetters)) {
+        setGameStatus("won");
+      } else {
+        setGameStatus("correct");
+      }
+    } else {
+      const nextWrong = wrongGuesses + 1;
+      setWrongGuesses(nextWrong);
+      setGameStatus(nextWrong >= MAX_WRONG ? "lost" : "wrong");
     }
 
     setInput("");
@@ -36,36 +49,93 @@ function App() {
     setGuessedLetters([]);
     setWrongGuesses(0);
     setInput("");
+    setGameStatus("idle");
   };
 
   const won = isWordGuessed(word, guessedLetters);
   const lost = wrongGuesses >= MAX_WRONG;
 
   return (
-    <div style={{ textAlign: "center", padding: "2rem" }}>
-      <h1>CRK Hangman Test</h1>
+    <div className="app-shell">
+      <header className="app-header">
+        <img src={icon} alt="CRK icon" className="app-logo" />
+        <div className="app-title-wrapper">
+          <p className="app-eyebrow">CRK Hangman</p>
+          <h1>Guess the Cookie's Name</h1>
+        </div>
+      </header>
 
-      <h2>{maskedWord}</h2>
+      <main className="game-panel">
+        <div className="status-row">
+          <div className="status-card">
+            <span>Wrong guesses</span>
+            <strong>{wrongGuesses} / {MAX_WRONG}</strong>
+          </div>
+          <div className={`status-card status-${won ? "won" : lost ? "lost" : gameStatus}`}>
+            <span>
+              {won
+                ? "You Win"
+                : lost
+                ? "You Lose"
+                : gameStatus === "correct"
+                ? "Correct Guess"
+                : gameStatus === "wrong"
+                ? "Wrong Guess"
+                : "Keep Guessing"}
+            </span>
+          </div>
+        </div>
 
-      <p>Wrong guesses: {wrongGuesses} / {MAX_WRONG}</p>
+        <section className="guess-summary">
+          <div className="guessed-letters-panel">
+            <div className="guessed-letters-label">Already guessed letters</div>
+            <div className="guessed-letters">
+              {guessedLetters.length > 0 ? (
+                guessedLetters.map((letter) => (
+                  <span key={letter} className="guessed-letter-chip">
+                    {letter.toUpperCase()}
+                  </span>
+                ))
+              ) : (
+                <span className="empty-state">None yet</span>
+              )}
+            </div>
+          </div>
 
-      {won && <h2>You Win!</h2>}
-      {lost && <h2>You Lose! Word was: {word}</h2>}
+          <div
+            className="word-display"
+            aria-label="Masked word"
+            style={{ fontSize: `${wordFontSize}px` }}
+          >
+            {maskedWord}
+          </div>
+        </section>
 
-      {!won && !lost && (
-        <>
-          <input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            maxLength={1}
-          />
-          <button onClick={handleGuess}>Guess</button>
-        </>
-      )}
-
-      {(won || lost) && (
-        <button onClick={resetGame}>Play Again</button>
-      )}
+        <section className="controls-panel">
+          {!won && !lost ? (
+            <>
+              <label className="letter-input-wrapper">
+                <span className="screen-reader-only">Enter letter</span>
+                <input
+                  className="letter-input"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value.slice(0, 1))}
+                  maxLength={1}
+                  placeholder="A"
+                  aria-label="Guess a letter"
+                />
+              </label>
+              <button className="primary-button" onClick={handleGuess}>
+                Guess
+              </button>
+            </>
+          ) : (
+            <button className="primary-button" onClick={resetGame}>
+              Play Again
+            </button>
+          )}
+        </section>
+      </main>
     </div>
   );
 }

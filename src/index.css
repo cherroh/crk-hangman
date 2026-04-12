@@ -64,7 +64,7 @@
 
 body {
   margin: 0;
-  background-color: #e3d3c7;
+  background: radial-gradient(circle at top left, #e9f4ff 0%, #eef5ff 25%, #f8fbff 55%, #edf3fb 100%);
 }
 
 h1,
