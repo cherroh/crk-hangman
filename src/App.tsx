@@ -115,7 +115,6 @@ function App() {
     }
 
     setAiStatus("loading");
-    setAiHint("GingerBrave is coming...");
 
     try {
       const { pipeline } = await import("@xenova/transformers");
@@ -140,18 +139,16 @@ function App() {
     setShowHintPanel(true);
     setHintLoading(true);
     setAiStatus("loading");
-    setAiHint(!hintUsedThisRound ? "GingerBrave is coming..." : "GingerBrave is thinking...");
+    setAiHint("GingerBrave is thinking...");
     setHintUsedThisRound(true);
 
-    await new Promise((resolve) => window.requestAnimationFrame(() => resolve(null)));
+    await new Promise((resolve) => setTimeout(resolve, 10));
 
     const generator = await ensureAiGenerator();
     if (!generator) {
       setHintLoading(false);
       return;
     }
-
-    setAiHint("GingerBrave is thinking...");
 
     const wrongLetters = guessedLetters.filter((letter) => !word.toLowerCase().includes(letter));
     const pattern = maskedLetters.join(" ");
