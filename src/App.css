@@ -354,6 +354,44 @@
   min-width: 0;
 }
 
+.hint-panel {
+  display: flex;
+  justify-content: center;
+}
+
+.hint-card {
+  width: 100%;
+  max-width: 740px;
+  padding: 1.4rem 1.5rem;
+  background: #eef6ff;
+  border: 1px solid rgba(72, 118, 188, 0.18);
+  border-radius: 24px;
+  box-shadow: 0 16px 32px rgba(31, 66, 119, 0.06);
+}
+
+.hint-label {
+  display: block;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: 700;
+  color: #1e427f;
+  margin-bottom: 0.75rem;
+}
+
+.hint-text,
+.hint-sample {
+  margin: 0;
+  color: #1f3e73;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.hint-sample {
+  margin-top: 0.85rem;
+  opacity: 0.88;
+}
+
 .guessed-letters-panel {
   display: flex;
   flex-direction: column;
@@ -499,6 +537,29 @@
   font-size: 1rem;
   font-weight: 700;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.secondary-button {
+  border: none;
+  cursor: pointer;
+  padding: 1rem 1.6rem;
+  border-radius: 16px;
+  background: #f0f4ff;
+  color: #204a8a;
+  font-size: 1rem;
+  font-weight: 700;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.secondary-button:hover {
+  transform: translateY(-1px);
+  background: #e4ecff;
+  box-shadow: 0 10px 22px rgba(71, 105, 163, 0.14);
+}
+
+.secondary-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .primary-button:hover {
