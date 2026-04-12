@@ -143,6 +143,8 @@ function App() {
     setAiHint(!hintUsedThisRound ? "GingerBrave is coming..." : "GingerBrave is thinking...");
     setHintUsedThisRound(true);
 
+    await new Promise((resolve) => window.requestAnimationFrame(() => resolve(null)));
+
     const generator = await ensureAiGenerator();
     if (!generator) {
       setHintLoading(false);
@@ -448,7 +450,7 @@ function App() {
           )}
         </section>
 
-        {showHintPanel && (
+        {(showHintPanel || hintLoading) && (
           <section className="hint-panel">
             <div className="hint-card">
               <span className="hint-label">Message GingerBrave</span>

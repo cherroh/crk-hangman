@@ -215,6 +215,12 @@
   text-align: left;
 }
 
+.app-title-wrapper h1 {
+  margin: 0;
+  line-height: 1.45;
+  word-break: break-word;
+}
+
 .app-eyebrow {
   margin: 0 0 0.25rem;
   font-size: 0.95rem;
