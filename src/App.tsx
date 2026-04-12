@@ -123,6 +123,9 @@ function App() {
                 ? "Wrong Guess"
                 : "Keep Guessing"}
             </span>
+            {lost && (
+              <span className="status-answer">Answer: {word}</span>
+            )}
           </div>
         </div>
 
