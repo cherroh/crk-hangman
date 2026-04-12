@@ -426,6 +426,15 @@
   min-height: 3rem;
 }
 
+.word-space {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 3rem;
+  min-width: 3rem;
+  min-height: 3rem;
+}
+
 .controls-panel {
   display: flex;
   align-items: center;

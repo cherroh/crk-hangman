@@ -9,7 +9,7 @@ import hangman5 from "./assets/hangman5.png";
 import hangman6 from "./assets/hangman6.png";
 import "./App.css";
 import { WORDS } from "./data/words";
-import { getMaskedWord, isWordGuessed } from "./utils/gameLogic";
+import { getMaskedLetters, isWordGuessed } from "./utils/gameLogic";
 
 const MAX_WRONG = 6;
 
@@ -25,8 +25,7 @@ function App() {
   const [inputError, setInputError] = useState(false);
   const [gameStatus, setGameStatus] = useState<"idle" | "correct" | "wrong" | "won" | "lost">("idle");
 
-  const maskedWord = getMaskedWord(word, guessedLetters);
-  const maskedLetters = maskedWord.split(" ");
+  const maskedLetters = getMaskedLetters(word, guessedLetters);
 
   useEffect(() => {
     if (gameStatus !== "correct" && gameStatus !== "wrong") {
@@ -145,11 +144,15 @@ function App() {
 
           <div className="word-display" aria-label="Masked word">
             <div className="word-display-inner">
-              {maskedLetters.map((letter, index) => (
-                <span key={`${letter}-${index}`} className="word-tile">
-                  {letter}
-                </span>
-              ))}
+              {maskedLetters.map((letter, index) =>
+                letter === " " ? (
+                  <span key={`space-${index}`} className="word-space" aria-hidden="true" />
+                ) : (
+                  <span key={`${letter}-${index}`} className="word-tile">
+                    {letter}
+                  </span>
+                )
+              )}
             </div>
           </div>
         </section>
