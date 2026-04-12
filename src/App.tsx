@@ -62,6 +62,7 @@ function App() {
   const [aiHint, setAiHint] = useState("Press Hint to ask GingerBrave for help.");
   const [aiStatus, setAiStatus] = useState<"idle" | "loading" | "ready" | "error">("idle");
   const [hintLoading, setHintLoading] = useState(false);
+  const [showHintPanel, setShowHintPanel] = useState(false);
   const aiGenerator = useRef<any>(null);
 
   const maskedLetters = getMaskedLetters(word, guessedLetters);
@@ -135,8 +136,9 @@ function App() {
       return;
     }
 
+    setShowHintPanel(true);
     setHintLoading(true);
-    setAiHint("Gingerbrave is thinking...");
+    setAiHint("GingerBrave is thinking...");
 
     const generator = await ensureAiGenerator();
     if (!generator) {
@@ -250,7 +252,7 @@ function App() {
     } catch (error) {
       console.error("GingerBrave failed to send a message", error);
       setAiStatus("error");
-      setAiHint("Gingerbrave can't come up with a hint");
+      setAiHint("GingerBrave can't come up with a hint");
     } finally {
       setHintLoading(false);
     }
@@ -306,6 +308,7 @@ function App() {
     setAiHint("Press Hint to ask GingerBrave for help.");
     setAiStatus("idle");
     setHintLoading(false);
+    setShowHintPanel(false);
   };
 
   const hangmanImages = [
@@ -389,13 +392,6 @@ function App() {
           </div>
         </section>
 
-        <section className="hint-panel">
-          <div className="hint-card">
-            <span className="hint-label">Message Gingerbrave</span>
-            <p className="hint-text">{aiHint}</p>
-          </div>
-        </section>
-
         <section className="controls-panel">
           {!won && !lost ? (
             <form
@@ -441,6 +437,15 @@ function App() {
             </button>
           )}
         </section>
+
+        {showHintPanel && (
+          <section className="hint-panel">
+            <div className="hint-card">
+              <span className="hint-label">Message GingerBrave</span>
+              <p className="hint-text">{aiHint}</p>
+            </div>
+          </section>
+        )}
       </main>
     </div>
   );
