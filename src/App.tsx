@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
 import icon from "./assets/crkicon.png";
+import hangmanBase from "./assets/hangmanbase.png";
+import hangman1 from "./assets/hangman1.png";
+import hangman2 from "./assets/hangman2.png";
+import hangman3 from "./assets/hangman3.png";
+import hangman4 from "./assets/hangman4.png";
+import hangman5 from "./assets/hangman5.png";
+import hangman6 from "./assets/hangman6.png";
 import "./App.css";
 import { WORDS } from "./data/words";
 import { getMaskedWord, isWordGuessed } from "./utils/gameLogic";
@@ -73,6 +80,17 @@ function App() {
   const won = isWordGuessed(word, guessedLetters);
   const lost = wrongGuesses >= MAX_WRONG;
 
+  const hangmanImages = [
+    hangmanBase,
+    hangman1,
+    hangman2,
+    hangman3,
+    hangman4,
+    hangman5,
+    hangman6,
+  ];
+  const currentHangmanImage = hangmanImages[Math.min(wrongGuesses, MAX_WRONG)];
+
   return (
     <div className="app-shell">
       <header className="app-header">
@@ -86,6 +104,11 @@ function App() {
       <main className="game-panel">
         <div className="status-row">
           <div className="status-card">
+            <img
+              src={currentHangmanImage}
+              alt={`Hangman stage ${wrongGuesses} of ${MAX_WRONG}`}
+              className="hangman-image"
+            />
             <span>Wrong guesses</span>
             <strong>{wrongGuesses} / {MAX_WRONG}</strong>
           </div>

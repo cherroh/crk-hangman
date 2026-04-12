@@ -264,7 +264,7 @@
   display: block;
   width: 100%;
   text-align: center;
-  font-size: 1.4rem;
+  font-size: 2.4rem;
   line-height: 1.1;
   font-weight: 800;
   opacity: 0.95;
@@ -272,6 +272,14 @@
 
 .status-card strong {
   font-size: 1.6rem;
+}
+
+.hangman-image {
+  width: 100%;
+  max-width: 220px;
+  height: auto;
+  object-fit: contain;
+  border-radius: 18px;
 }
 
 .status-card.status-idle {
