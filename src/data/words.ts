@@ -79,7 +79,7 @@ export const WORDS = [
   "mercurial knight",
   "silverbell",
   "rebel",
-  "creme brûlée",
+  "creme brulee",
   "linzer",
   "olive",
   "mozzarella",
