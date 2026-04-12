@@ -15,6 +15,7 @@ function App() {
   const [guessedLetters, setGuessedLetters] = useState<string[]>([]);
   const [wrongGuesses, setWrongGuesses] = useState(0);
   const [input, setInput] = useState("");
+  const [inputError, setInputError] = useState(false);
   const [gameStatus, setGameStatus] = useState<"idle" | "correct" | "wrong" | "won" | "lost">("idle");
 
   const maskedWord = getMaskedWord(word, guessedLetters);
@@ -35,8 +36,13 @@ function App() {
   const handleGuess = () => {
     const normalized = input.toLowerCase().trim().replace(/[^a-z]/g, "");
 
-    if (!normalized || guessedLetters.includes(normalized)) return;
+    if (!normalized) return;
+    if (guessedLetters.includes(normalized)) {
+      setInputError(true);
+      return;
+    }
 
+    setInputError(false);
     const nextGuessedLetters = [...guessedLetters, normalized];
     setGuessedLetters(nextGuessedLetters);
 
@@ -60,6 +66,7 @@ function App() {
     setGuessedLetters([]);
     setWrongGuesses(0);
     setInput("");
+    setInputError(false);
     setGameStatus("idle");
   };
 
@@ -126,22 +133,35 @@ function App() {
 
         <section className="controls-panel">
           {!won && !lost ? (
-            <>
+            <form
+              className="guess-form"
+              onSubmit={(event) => {
+                event.preventDefault();
+                handleGuess();
+              }}
+            >
               <label className="letter-input-wrapper">
                 <span className="screen-reader-only">Enter letter</span>
                 <input
-                  className="letter-input"
+                  className={`letter-input${inputError ? " letter-input-error" : ""}`}
                   value={input}
-                  onChange={(e) => setInput(e.target.value.slice(0, 1))}
+                  onChange={(e) => {
+                    const newValue = e.target.value.slice(0, 1);
+                    const normalizedValue = newValue.toLowerCase().replace(/[^a-z]/g, "");
+                    setInput(newValue);
+                    if (!normalizedValue || !guessedLetters.includes(normalizedValue)) {
+                      setInputError(false);
+                    }
+                  }}
                   maxLength={1}
                   placeholder="a"
                   aria-label="Guess a letter"
                 />
               </label>
-              <button className="primary-button" onClick={handleGuess}>
+              <button className="primary-button" type="submit">
                 Guess
               </button>
-            </>
+            </form>
           ) : (
             <button className="primary-button" onClick={resetGame}>
               Play Again
