@@ -18,9 +18,7 @@ function App() {
   const [gameStatus, setGameStatus] = useState<"idle" | "correct" | "wrong" | "won" | "lost">("idle");
 
   const maskedWord = getMaskedWord(word, guessedLetters);
-  const maskedWordLength = maskedWord.length;
   const maskedLetters = maskedWord.split(" ");
-  const wordFontSize = Math.max(2, Math.min(48, Math.floor(720 / Math.max(maskedWordLength, 10))));
 
   useEffect(() => {
     if (gameStatus !== "correct" && gameStatus !== "wrong") {
@@ -115,11 +113,7 @@ function App() {
             </div>
           </div>
 
-          <div
-            className="word-display"
-            aria-label="Masked word"
-            style={{ fontSize: `${wordFontSize}px` }}
-          >
+          <div className="word-display" aria-label="Masked word">
             <div className="word-display-inner">
               {maskedLetters.map((letter, index) => (
                 <span key={`${letter}-${index}`} className="word-tile">
