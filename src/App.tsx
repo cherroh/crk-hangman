@@ -63,7 +63,7 @@ function App() {
   const [aiStatus, setAiStatus] = useState<"idle" | "loading" | "ready" | "error">("idle");
   const [hintLoading, setHintLoading] = useState(false);
   const [showHintPanel, setShowHintPanel] = useState(false);
-  const [hasHintedThisRound, setHasHintedThisRound] = useState(false);
+  const [hintUsedThisRound, setHintUsedThisRound] = useState(false);
   const aiGenerator = useRef<any>(null);
 
   const maskedLetters = getMaskedLetters(word, guessedLetters);
@@ -140,8 +140,8 @@ function App() {
     setShowHintPanel(true);
     setHintLoading(true);
     setAiStatus("loading");
-    setAiHint(!hasHintedThisRound ? "GingerBrave is coming..." : "GingerBrave is thinking...");
-    setHasHintedThisRound(true);
+    setAiHint(!hintUsedThisRound ? "GingerBrave is coming..." : "GingerBrave is thinking...");
+    setHintUsedThisRound(true);
 
     const generator = await ensureAiGenerator();
     if (!generator) {
@@ -185,6 +185,7 @@ function App() {
       if (nextLetter) {
         setAiHint(`GingerBrave: Try “${nextLetter.toUpperCase()}”!`);
         setHintLoading(false);
+        setHintUsedThisRound(true);
         return;
       }
     }
@@ -210,6 +211,7 @@ function App() {
       if (bestLetter) {
         setAiHint(`GingerBrave: Try “${bestLetter.toUpperCase()}”!`);
         setHintLoading(false);
+        setHintUsedThisRound(true);
         return;
       }
     }
@@ -254,6 +256,7 @@ function App() {
       const chosenLetter = nextLetter ?? fallbackLetter();
 
       setAiHint(`GingerBrave: Try “${chosenLetter.toUpperCase()}”!`);
+      setHintUsedThisRound(true);
     } catch (error) {
       console.error("GingerBrave failed to send a message", error);
       setAiStatus("error");
@@ -287,6 +290,7 @@ function App() {
     setInputError(false);
     const nextGuessedLetters = [...guessedLetters, normalized];
     setGuessedLetters(nextGuessedLetters);
+    setHintUsedThisRound(false);
 
     if (word.includes(normalized)) {
       if (isWordGuessed(word, nextGuessedLetters)) {
@@ -314,7 +318,7 @@ function App() {
     setAiStatus("idle");
     setHintLoading(false);
     setShowHintPanel(false);
-    setHasHintedThisRound(false);
+    setHintUsedThisRound(false);
   };
 
   const hangmanImages = [
@@ -432,7 +436,7 @@ function App() {
                 className="secondary-button"
                 type="button"
                 onClick={requestAiHint}
-                disabled={won || lost || hintLoading}
+                disabled={won || lost || hintLoading || hintUsedThisRound}
               >
                 {hintLoading ? "Loading..." : "Hint"}
               </button>
