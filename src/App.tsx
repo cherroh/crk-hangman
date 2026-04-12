@@ -63,6 +63,7 @@ function App() {
   const [aiStatus, setAiStatus] = useState<"idle" | "loading" | "ready" | "error">("idle");
   const [hintLoading, setHintLoading] = useState(false);
   const [showHintPanel, setShowHintPanel] = useState(false);
+  const [hasHintedThisRound, setHasHintedThisRound] = useState(false);
   const aiGenerator = useRef<any>(null);
 
   const maskedLetters = getMaskedLetters(word, guessedLetters);
@@ -138,13 +139,17 @@ function App() {
 
     setShowHintPanel(true);
     setHintLoading(true);
-    setAiHint("GingerBrave is thinking...");
+    setAiStatus("loading");
+    setAiHint(!hasHintedThisRound ? "GingerBrave is coming..." : "GingerBrave is thinking...");
+    setHasHintedThisRound(true);
 
     const generator = await ensureAiGenerator();
     if (!generator) {
       setHintLoading(false);
       return;
     }
+
+    setAiHint("GingerBrave is thinking...");
 
     const wrongLetters = guessedLetters.filter((letter) => !word.toLowerCase().includes(letter));
     const pattern = maskedLetters.join(" ");
@@ -309,6 +314,7 @@ function App() {
     setAiStatus("idle");
     setHintLoading(false);
     setShowHintPanel(false);
+    setHasHintedThisRound(false);
   };
 
   const hangmanImages = [
